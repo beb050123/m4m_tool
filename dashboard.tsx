@@ -4,11 +4,13 @@ import type React from "react"
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Download } from "lucide-react"
 import { convertXmlToJson } from "@/lib/xml-to-json"
 import { countries } from "@/lib/countries"
 
@@ -58,11 +60,34 @@ export default function Dashboard() {
     router.push("/auth")
   }
 
+  // Function to download JSON as a file
+  const handleDownloadJson = () => {
+    if (!jsonResult) return
+
+    const blob = new Blob([jsonResult], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'converted-data.json'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-white p-4">
       <div className="mx-auto max-w-4xl">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">XML to JSON Converter</h1>
+          <div className="flex items-center gap-4">
+            <Image
+              src="/m4m-logo.png"
+              alt="M4M Logo"
+              width={180}
+              height={50}
+              priority
+            />
+          </div>
           <Button variant="outline" onClick={handleLogout}>
             Logout
           </Button>
@@ -125,8 +150,23 @@ export default function Dashboard() {
 
           <Card>
             <CardHeader>
-              <CardTitle>JSON Result</CardTitle>
-              <CardDescription>The converted JSON will appear here</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>JSON Result</CardTitle>
+                  <CardDescription>The converted JSON will appear here</CardDescription>
+                </div>
+                {jsonResult && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1"
+                    onClick={handleDownloadJson}
+                  >
+                    <Download size={16} />
+                    Download JSON
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
               <Textarea
