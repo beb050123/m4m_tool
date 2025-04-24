@@ -81,7 +81,7 @@ export default function Dashboard() {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Image
-              src="/m4m-logo.png"
+              src="https://m4mgmt.org/wp-content/uploads/2024/06/M4M-Logo-Horizontal-300ppi.png"
               alt="M4M Logo"
               width={180}
               height={50}
